@@ -24,9 +24,9 @@
 module tld_zxtres (
    input wire clk50mhz,
 
-   output wire [5:0] vga_r,
-   output wire [5:0] vga_g,
-   output wire [5:0] vga_b,
+   output wire [7:0] vga_r,
+   output wire [7:0] vga_g,
+   output wire [7:0] vga_b,
    output wire vga_hs,
    output wire vga_vs,
    input wire ear,
@@ -38,8 +38,11 @@ module tld_zxtres (
    output wire audio_out_right,
    
    output wire [19:0] sram_addr,
-   inout wire [7:0] sram_data,
+   inout wire [15:0] sram_data,
    output wire sram_we_n,
+   output wire sram_oe_n,
+   output wire sram_ub_n,
+   output wire sram_lb_n,
    
    output wire flash_cs_n,
    output wire flash_clk,
@@ -53,6 +56,14 @@ module tld_zxtres (
    output wire uart_rts,
    output wire uart_reset,
    output wire uart_gpio0,
+   
+   output wire i2c_scl,
+   inout wire i2c_sda,
+   
+   output wire midi_out,
+   input wire midi_clkbd,
+   input wire midi_wsbd,
+   input wire midi_dabd,
    
    input wire joy_data,
    output wire joy_clk,
@@ -104,8 +115,15 @@ module tld_zxtres (
    
 	 wire wifi_switcher;
    wire campo_imagen, interlaced_image;
+   
    wire [20:0] sram_addr_2mb;
+   wire [7:0] sram_data_8b;
    assign sram_addr = sram_addr_2mb[19:0];
+   assign sram_lb_n = sram_addr_2mb[20];
+   assign sram_ub_n = ~sram_addr_2mb[20];
+   assign sram_data = (sram_oe_n == 1'b1)? {sram_data_8b, sram_data_8b} : 16'hZZZZ;
+   assign sram_data_8b = (sram_oe_n == 1'b1)? 8'hZZ : 
+                         (sram_addr_2mb[20] == 1'b0)? sram_data[7:0] : sram_data[15:8];   
    
    wire vga_enable, scanlines_enable, clk14en;
    wire [1:0] ula_mode;
@@ -148,18 +166,22 @@ module tld_zxtres (
     .audio_left(audio_left),
     .audio_right(audio_right),
 
-    .midi_out(),
-    .clkbd(1'b0),
-    .wsbd(1'b0),
-    .dabd(1'b0),    
+    .midi_out(midi_out),
+    .clkbd(midi_clkbd),
+    .wsbd(midi_wsbd),
+    .dabd(midi_dabd),
+    
+    .i2c_scl(i2c_scl),
+    .i2c_sda(i2c_sda),    
   
     .uart_tx(uart_tx),
     .uart_rx(uart_rx),
     .uart_rts(uart_rts),
 
     .sram_addr(sram_addr_2mb),
-    .sram_data(sram_data),
+    .sram_data(sram_data_8b),
     .sram_we_n(sram_we_n),
+    .sram_oe_n(sram_oe_n),
     
     .flash_cs_n(flash_cs_n),
     .flash_clk(flash_clk),

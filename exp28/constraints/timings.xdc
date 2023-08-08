@@ -14,13 +14,13 @@ set_false_path -from [get_clocks clk_out3_clk_wiz_0] -to [get_clocks clk_out2_cl
 set_false_path -from [get_clocks clk_out2_clk_wiz_0] -to [get_clocks tx_symbol_clk]
 set_false_path -from [get_clocks tx_symbol_clk] -to [get_clocks clk_out2_clk_wiz_0] 
 
-set_property IOB TRUE [all_inputs]
+#set_property IOB TRUE [all_inputs]
 set_property IOB TRUE [all_outputs]
 
 set_property BITSTREAM.CONFIG.SPI_32BIT_ADDR YES [current_design]
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH 4 [current_design]
 set_property BITSTREAM.GENERAL.COMPRESS TRUE [current_design]
-set_property BITSTREAM.CONFIG.CONFIGRATE 33 [current_design]  # 3, 6, 9, 12, 16, 22, 26, 33, 40, 50, 66
+set_property BITSTREAM.CONFIG.CONFIGRATE 50 [current_design]  # 3, 6, 9, 12, 16, 22, 26, 33, 40, 50, 66
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 set_property CFGBVS VCCO [current_design]
 #set_property BITSTREAM.CONFIG.CONFIGFALLBACK ENABLE [current_design]
