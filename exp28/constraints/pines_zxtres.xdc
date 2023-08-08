@@ -214,10 +214,8 @@ set_property IOSTANDARD LVCMOS33 [get_ports uart_reset]
 #I2C
 set_property PACKAGE_PIN Y7 [get_ports i2c_sda]
 set_property IOSTANDARD LVCMOS33 [get_ports i2c_sda]
-set_property PULLUP true [get_ports i2c_sda]
 set_property PACKAGE_PIN AB6 [get_ports i2c_scl]
 set_property IOSTANDARD LVCMOS33 [get_ports i2c_scl]
-set_property PULLUP true [get_ports i2c_scl] 
 
 #MIDI
 set_property PACKAGE_PIN Y8 [get_ports midi_wsbd]
