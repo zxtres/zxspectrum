@@ -111,9 +111,9 @@ module zxtres_wrapper (
   input wire [15:0] audio_l,
   input wire [15:0] audio_r,
   //////////////////////////////////////////
-  output reg [5:0] ro,
-  output reg [5:0] go,
-  output reg [5:0] bo,
+  output reg [7:0] ro,
+  output reg [7:0] go,
+  output reg [7:0] bo,
   output reg hsync,
   output reg vsync,
   //////////////////////////////////////////
@@ -323,9 +323,9 @@ module zxtres_wrapper (
 
   always @* begin
     if (video_output_sel == 1'b0) begin // 15kHz + DP output
-      ro = rpal[7:2];
-      go = gpal[7:2];
-      bo = bpal[7:2];
+      ro = rpal;
+      go = gpal;
+      bo = bpal;
       hsync = csync_ext_n;
       vsync = clkcolor4x;  // si no se habilita la generación de este reloj, esta señal es 1
     end

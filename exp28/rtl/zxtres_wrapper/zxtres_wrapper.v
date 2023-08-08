@@ -26,11 +26,11 @@
 //    Any distributed copy of this file must keep this notice intact.
 //
 
-`ifdef A200T
-`include "zxtres_wrapper_a200t.v"
+`ifdef A35T
+`include "zxtres_wrapper_a35t.v"
 `elsif A100T
 `include "zxtres_wrapper_a100t.v"
 `else
-`include "zxtres_wrapper_a35t.v"
+`include "zxtres_wrapper_a200t.v"
 `endif
 
