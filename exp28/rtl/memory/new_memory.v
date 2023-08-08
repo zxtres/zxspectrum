@@ -83,7 +83,8 @@ module new_memory (
    // Interface con la SRAM
    output wire [20:0] sram_addr,
    inout wire [7:0] sram_data,
-   output wire sram_we_n
+   output wire sram_we_n,
+   output reg sram_oe_n
    );
 
 `include "../config/config.vh"
@@ -101,6 +102,17 @@ module new_memory (
    assign issue2_keyboard_enabled = issue2_keyboard;
    assign in_boot_mode = ~masterconf_frozen;
    assign disable_contention = disable_cont;
+   
+   always @* begin
+     if (enable_pzx == 1'b0) begin
+       if (mreq_n == 1'b0 && rd_n == 1'b0)
+         sram_oe_n = 1'b0;
+       else
+         sram_oe_n = 1'b1;
+     end
+     else
+       sram_oe_n = ~sram_we_n;
+   end
 
    always @(posedge clk) begin
 //      negedge_configrom <= {negedge_configrom[0], page_configrom_active};

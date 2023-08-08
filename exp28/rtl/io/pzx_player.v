@@ -40,8 +40,8 @@ module pzx_player (
     input wire [1:0] memory_register,
     input wire play_in,
     input wire stop_in,
-	input wire rewindTo0Counter_in,
-	input wire resetTo0Counter_in,
+    input wire rewindTo0Counter_in,
+    input wire resetTo0Counter_in,
     input wire jump_in,
     output wire pulse_out,
     output wire playing,
@@ -102,13 +102,13 @@ module pzx_player (
               DATA          = 8'd3,
               BROWSE        = 8'd4;
 
-    wire [20:0] initsram_addr = (memory_register == 2'b00)? 21'h032000 : 21'h080000;
-    wire [20:0] length_sram = (memory_register == 2'b00)? 21'h04E000 :
-                              (memory_register == 2'b01)? 21'h080000 :
-                                                          21'h180000;
+    localparam [20:0] INITSRAM_ADDR = 21'h050000;
+    wire [20:0] end_sram_addr = (memory_register == 2'b00)? 21'h07FFFF - INITSRAM_ADDR :
+                                (memory_register == 2'b01)? 21'h0FFFFF - INITSRAM_ADDR : 
+                                                            21'h1FFFFF - INITSRAM_ADDR;
     reg [20:0] a = 21'h000000;
     reg [20:0] tag_address = 21'h000000;
-    assign sramaddr = initsram_addr + a + ((a > 21'hDFFF && memory_register == 2'b00) ? 21'h18000 : 0);
+    assign sramaddr = a + INITSRAM_ADDR;
 
     reg [20:0] counter0_address = 21'h000000;
     reg flagResetCounter0 = 1'b0;
@@ -212,7 +212,7 @@ module pzx_player (
       else if (resetTo0Counter) begin
           flagResetCounter0 <= 1'b1;
       end
-      else if (a == length_sram) begin
+      else if (a > end_sram_addr) begin
         a <= 21'h000000;
       end
       else begin

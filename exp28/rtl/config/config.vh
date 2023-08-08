@@ -24,10 +24,15 @@
 // Build options (comment out to disable a specific option)
 
 `define LOAD_ROM_FROM_FLASH_OPTION
-//`define INCLUDE_EASTER_EGG
+
+`ifndef A35T
+  `define INCLUDE_EASTER_EGG
+`endif
+
 // The following two defines are taken into account only if LOAD_ROM_FROM_FLASH_OPTION is not defined
 `define DEFAULT_SYSTEM_ROM "128en.hex"
 `define DEFAULT_DIVMMC_ROM "esxdos089.hex"
+
 `define MIDI_SYNTH_OPTION
 `define RTC_OPTION
 `define UART_ESP8266_OPTION
@@ -56,8 +61,10 @@
 `define MONOCHROMERGB
 `define SAA1099
 `define INITIAL_KB_RESET
+
+
 // ZXUNO core ID string. Must be padded with zero bytes to the right (16 bytes total)
-  localparam COREID_STRING = {"EXP28-280723", 8'h00, 8'h00, 8'h00, 8'h00};
+  localparam COREID_STRING = {"EXP28-070823", 8'h00, 8'h00, 8'h00, 8'h00};
 
 // Power-on/FPGA PROG video configuration
   localparam

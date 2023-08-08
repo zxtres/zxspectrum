@@ -66,6 +66,7 @@ module zxuno (
   output wire [20:0] sram_addr,
   inout wire [7:0] sram_data,
   output wire sram_we_n,
+  output wire sram_oe_n,
 
   // Flash SPI
   output wire flash_cs_n,
@@ -626,7 +627,8 @@ module zxuno (
 // Interface con la SRAM
     .sram_addr          (sram_addr      ),
     .sram_data          (sram_data      ),
-    .sram_we_n          (sram_we_n      ));
+    .sram_we_n          (sram_we_n      ),
+    .sram_oe_n          (sram_oe_n)     );
 
   ps2_keyb el_teclado (
     .clk                (sysclk         ),
@@ -905,6 +907,7 @@ module zxuno (
   board_capabilities capreg (
     .clk(sysclk),
     .poweron_rst_n(power_on_reset_n),
+    .in_boot_mode(in_boot_mode),
     .zxuno_addr(zxuno_addr),
     .zxuno_regrd(zxuno_regrd),
     .zxuno_regwr(zxuno_regwr),
