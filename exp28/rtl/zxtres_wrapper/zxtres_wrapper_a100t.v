@@ -162,7 +162,7 @@ module zxtres_wrapper (
 
   wire [18:0] ar, aw;
   wire we;
-  wire [5:0] ro_vga, go_vga, bo_vga;
+  wire [7:0] ro_vga, go_vga, bo_vga;
   wire [7:0] rpal, gpal, bpal;
   wire [7:0] rfb, gfb, bfb;
   wire [7:0] rdim, gdim, bdim;
@@ -581,9 +581,9 @@ module vga_consumer (
   input wire [7:0] ri,
   input wire [7:0] gi,
   input wire [7:0] bi,
-  output reg [5:0] ro,
-  output reg [5:0] go,
-  output reg [5:0] bo,
+  output reg [7:0] ro,
+  output reg [7:0] go,
+  output reg [7:0] bo,
   output reg hs,
   output reg vs
   );
@@ -643,14 +643,14 @@ module vga_consumer (
 
   always @* begin
     if (active_area) begin
-			ro = ri[7:2];
-      go = gi[7:2];
-      bo = bi[7:2];
+			ro = ri;
+      go = gi;
+      bo = bi;
     end
     else begin
-      ro = 6'h00;
-      go = 6'h00;
-      bo = 6'h00;
+      ro = 8'h00;
+      go = 8'h00;
+      bo = 8'h00;
     end
   end
 endmodule
