@@ -1,13 +1,3 @@
-# How to update
-
-Copy the relevant BIT file (a35t for ZXTRES, a100t for ZXTRES+ or a200t for ZXTRES++) into the BIN directory of your ESXDOS enabled SD card. Make sure you have the UPDCORE command (available at the SW directory of the ZX Spectrum repository).
-
-Now boot the ZXTRES , type .updcore and follow directions.
-
-If a message tells you that you are not in root mode, do a master reboot (Ctrl-Alt-Bkspace) and keep pressing SYMBOL SHIFT+V until you see a red border, indicating you are now in root mode, and repeat the procedure.
-
-SYMBOL SHIFT key is mapped to Alt Gr (or right Alt) key in the PC keyboard.
-
 # Changelog
 
 ## Version 070823
