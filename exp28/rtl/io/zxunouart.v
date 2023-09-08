@@ -33,6 +33,8 @@ module zxunouart (
     output reg oe,
     output wire uart_tx,
     input wire uart_rx,
+    output wire mb_uart_tx,
+    input wire mb_uart_rx,
     output wire uart_rts
     );
 
@@ -45,6 +47,12 @@ module zxunouart (
 
     reg comenzar_trans = 1'b0;
     reg leyendo_estado = 1'b0;
+
+    reg mb_comenzar_trans = 1'b0;
+    wire mbtxbusy;
+    wire mb_data_received;
+    wire [7:0] mbrxdata;
+    wire mb_data_read;
 
     wire data_read;
 
@@ -61,7 +69,21 @@ module zxunouart (
         .rts(uart_rts)
     );
 
+    uart #(.CLK(CLK)) mbuartchip (
+        .clk(clk),
+        .txdata(din),
+        .txbegin(mb_comenzar_trans),
+        .txbusy(mbtxbusy),
+        .rxdata(mbrxdata),
+        .rxrecv(mb_data_received),
+        .data_read(mb_data_read),
+        .rx(mb_uart_rx),
+        .tx(mb_uart_tx),
+        .rts()
+    );
+
     assign data_read = (zxuno_addr == UARTDATA && zxuno_regrd == 1'b1);
+    assign mb_data_read = (zxuno_addr == MBUARTDATA && zxuno_regrd == 1'b1);
 
     always @* begin
         oe = 1'b0;
@@ -74,6 +96,14 @@ module zxunouart (
             dout = {data_received, txbusy, 6'h00};
             oe = 1'b1;
         end
+        else if (mb_data_read) begin
+            dout = mbrxdata;
+            oe = 1'b1;
+        end
+        else if (zxuno_addr == MBUARTSTAT && zxuno_regrd == 1'b1) begin
+            dout = {mb_data_received, mbtxbusy, 6'h00};
+            oe = 1'b1;
+        end
     end
 
     always @(posedge clk) begin
@@ -83,5 +113,13 @@ module zxunouart (
         if (comenzar_trans == 1'b1 && txbusy == 1'b1) begin
             comenzar_trans <= 1'b0;
         end
+        
+        if (zxuno_addr == MBUARTDATA && zxuno_regwr == 1'b1 && mb_comenzar_trans == 1'b0 && mbtxbusy == 1'b0) begin
+            mb_comenzar_trans <= 1'b1;
+        end
+        if (mb_comenzar_trans == 1'b1 && mbtxbusy == 1'b1) begin
+            mb_comenzar_trans <= 1'b0;
+        end
+        
     end
 endmodule

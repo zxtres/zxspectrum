@@ -64,7 +64,7 @@
 
 
 // ZXUNO core ID string. Must be padded with zero bytes to the right (16 bytes total)
-  localparam COREID_STRING = {"EXP28-070823", 8'h00, 8'h00, 8'h00, 8'h00};
+  localparam COREID_STRING = {"EXP28-080923", 8'h00, 8'h00, 8'h00, 8'h00};
 
 // Power-on/FPGA PROG video configuration
   localparam
@@ -182,6 +182,10 @@
 // ZXUNO registers for UART (wifi module) handling
   localparam UARTDATA = 8'hC6,
              UARTSTAT = 8'hC7;
+
+// ZXUNO registers for middleboard handling
+  localparam MBUARTDATA = 8'hC8,
+             MBUARTSTAT = 8'hC9;
 
 // ZXUNO registers for PZX/real tape handling
   localparam SRAMADDR      = 8'hF0,

@@ -115,7 +115,11 @@ module zxuno (
   // AD724
   output wire ad724_xtal,
   output wire ad724_mode,
-  output wire ad724_enable_gencolorclk
+  output wire ad724_enable_gencolorclk,
+  
+  // UART
+  output wire mb_uart_tx,
+  input wire mb_uart_rx
   );
 
 `include "../config/config.vh"
@@ -127,7 +131,9 @@ module zxuno (
   wire joy_splitter;
   
   `ifdef UART_ESP8266_OPTION
-  
+
+  // Tengo que organizar esta historia de los iconos un poco, porque ahora
+  // está más feo que otra cosa. De momento, oculto todo esto.  
   reg [22:0] uart_counter = 22'h3FFFFF;
   reg is_uart = 1'b0;
   //reg show_uart = 1'b0;
@@ -1060,25 +1066,30 @@ module zxuno (
     .oe                 (oe_uart        ),
     .uart_tx            (uart_tx        ),
     .uart_rx            (uart_rx        ),
-    .uart_rts           (uart_rts       ));
+    .uart_rts           (uart_rts       ),
+    .mb_uart_tx         (mb_uart_tx     ),
+    .mb_uart_rx         (mb_uart_rx     ));
 	 
 always @(posedge sysclk) begin
 	if (~is_uart && uart_counter != 23'd0) begin
 		uart_counter = uart_counter - 22'd1;
-		if (~uart_rx)
+		if (~uart_rx || ~mb_uart_rx)
 			is_uart <= 1'b1;
 	end
 	if (is_uart) begin
-		if (~uart_rx || ~uart_tx)
+		if (~uart_rx || ~uart_tx || ~mb_uart_rx || ~mb_uart_tx)
 			uart_counter = 22'h3FFFFF;			
 		else if (uart_counter != 23'd0)
 			uart_counter = uart_counter - 22'd1;
 	end
 end
 
-assign r = pinta_uart && (uart_counter != 23'd0) ? ruart : rula;
-assign g = pinta_uart && (uart_counter != 23'd0) ? guart : gula;
-assign b = pinta_uart && (uart_counter != 23'd0) ? buart : bula;
+//assign r = pinta_uart && (uart_counter != 23'd0) ? ruart : rula;
+//assign g = pinta_uart && (uart_counter != 23'd0) ? guart : gula;
+//assign b = pinta_uart && (uart_counter != 23'd0) ? buart : bula;
+assign r = rula;
+assign g = gula;
+assign b = bula;
 	 
 `else
   assign uart_tx = 1'b0;

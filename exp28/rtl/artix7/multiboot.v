@@ -94,7 +94,7 @@ module multiboot (
    wire [31:0] icap_data;
    multiboot_artix7 el_multiboot (
       .clk(clk_icap),
-      .spi_address({8'h00,spi_addr}),  // aqui suponemos que la dirección puesta son los bits 31 a 8
+      .spi_address({spi_addr,8'h00}),  // aqui suponemos que la dirección puesta son los bits 31 a 8
       .reboot(boot_core/*reboot_ff*/),
       .icap_ce(icap_ce),
       .icap_we(icap_we),
