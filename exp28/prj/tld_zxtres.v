@@ -89,7 +89,10 @@ module tld_zxtres (
    inout wire  dp_tx_auxch_rx_n,   
    
    output wire testled,   // nos servirá como testigo de uso de la SPI
-   output wire testled2
+   output wire testled2,
+   
+   output wire mb_uart_tx,
+   input wire mb_uart_rx
    );
 
    wire sysclk, clk_icap, clkpalntsc;
@@ -222,7 +225,10 @@ module tld_zxtres (
     
     .ad724_xtal(),
     .ad724_mode(color_mode),
-    .ad724_enable_gencolorclk(enable_gencolorclk)
+    .ad724_enable_gencolorclk(enable_gencolorclk),
+
+    .mb_uart_tx(mb_uart_tx),
+    .mb_uart_rx(mb_uart_rx)
     );
 
   zxtres_wrapper #(.CLKVIDEO(28)) cosas_del_zxtres (
