@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 090923
+
+- Enabled core loading using the middle board. Implemented a second UART for easier comunication with the RP2040.
+- ZX3 core loading should work also.
+- RTC issues. Working on that.
+
 ## Version 070823
 
 -   Fixed SRAM management. Now the core correctly detects and use the complete 2 MB SRAM chip. You should see that in the boot screen.
