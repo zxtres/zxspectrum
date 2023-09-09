@@ -211,6 +211,12 @@ set_property IOSTANDARD LVCMOS33 [get_ports uart_gpio0]
 set_property PACKAGE_PIN L6 [get_ports uart_reset]
 set_property IOSTANDARD LVCMOS33 [get_ports uart_reset]
 
+#MIDDLE BOARD COMMS
+set_property PACKAGE_PIN V8 [get_ports mb_uart_rx]
+set_property IOSTANDARD LVCMOS33 [get_ports mb_uart_rx]
+set_property PACKAGE_PIN W9 [get_ports mb_uart_tx]
+set_property IOSTANDARD LVCMOS33 [get_ports mb_uart_tx]
+
 #I2C
 set_property PACKAGE_PIN Y7 [get_ports i2c_sda]
 set_property IOSTANDARD LVCMOS33 [get_ports i2c_sda]
