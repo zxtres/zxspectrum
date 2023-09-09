@@ -14,7 +14,7 @@ module multiboot (
     parameter ADDR_COREADDR = 8'hFC,
               ADDR_COREBOOT = 8'hFD;
               
-    parameter GOLDEN_CORE = 24'h0100000; // posición del core de Spectrum en la flash
+    parameter GOLDEN_CORE = 24'h100000; // posición del core de Spectrum en la flash
               
     reg [23:0] spi_addr = GOLDEN_CORE;   // default value
     reg writting_to_spi_addr = 1'b0;
@@ -94,7 +94,7 @@ module multiboot (
    wire [31:0] icap_data;
    multiboot_artix7 el_multiboot (
       .clk(clk_icap),
-      .spi_address({spi_addr,8'h00}),  // aqui suponemos que la dirección puesta son los bits 31 a 8
+      .spi_address({8'h00,spi_addr}),  // aqui suponemos que la dirección puesta son los bits 31 a 8. 00 a la izquierda porque usamos 32 bits
       .reboot(boot_core/*reboot_ff*/),
       .icap_ce(icap_ce),
       .icap_we(icap_we),
@@ -136,7 +136,7 @@ module multiboot_artix7 (
     icap_command[ 1] = {1'b1, 1'b1, 32'hAA995566};  // sync word
     icap_command[ 2] = {1'b1, 1'b1, 32'h20000000};  // nop
     icap_command[ 3] = {1'b1, 1'b1, 32'h30020001};  // escritura en registro WBSTAR
-    icap_command[ 4] = {1'b1, 1'b1, 32'h00000100};  // en este ciclo hay que poner la dirección SPI (28 bits)
+    icap_command[ 4] = {1'b1, 1'b1, 32'h00100000};  // en este ciclo hay que poner la dirección SPI (28 bits)
     icap_command[ 5] = {1'b1, 1'b1, 32'h30008001};  // escritura en registro CMD
     icap_command[ 6] = {1'b1, 1'b1, 32'h0000000F};  // dar orden de warm reboot (IPROG)
     icap_command[ 7] = {1'b1, 1'b1, 32'h20000000};  // nop 
@@ -158,7 +158,7 @@ module multiboot_artix7 (
       if (indx[3:0] != CYCLE_SPI_ADDRESS)
         {icap_ce, icap_we, icap_data} <= icap_command[indx[3:0]];
       else
-        {icap_ce, icap_we, icap_data} <= {2'b11, spi_address};
+        {icap_ce, icap_we, icap_data} <= {2'b11, 3'b000, spi_address[28:0]};
       if (indx[4] == 1'b1)
         indx <= indx + 5'd1;
     end
